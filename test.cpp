@@ -4,8 +4,8 @@
 
 using namespace std;
 
-int main()
+int main(int argc, char** argv)
 {
-    UInt256 u(UINT_MAX);
-    cout << u*u*u*u << endl;
+    cout << UInt256("12345") << endl;
+    cout << UInt256(12345)+1 << endl;
 }
