@@ -50,7 +50,22 @@ UInt256 operator+(UInt256 n, unsigned int m)
     return n;
 }
 
+UInt256& operator+=(UInt256& n, unsigned int m)
+{
+    n.addToPart(0,m);
+    return n;
+}
+
 UInt256 operator+(UInt256 n, const UInt256 &m)
+{
+    for (int i = 0; i < 8; ++i)
+    {
+        n.addToPart(i, m.parts[i]);
+    }
+    return n;
+}
+
+UInt256& operator+=(UInt256& n, const UInt256 &m)
 {
     for (int i = 0; i < 8; ++i)
     {
@@ -103,4 +118,59 @@ UInt256 operator<<(UInt256 n, int b)
         (n.parts[7] <<= b) += prev;
     }
     return n;
+}
+
+UInt256 operator*(const UInt256 &n, unsigned int m)
+{
+    UInt256 a;
+    std::bitset<32> bits(m);
+    for (int i = 0; i < 32; ++i)
+    {
+        if(bits[i])
+        {
+            a += (n << i);
+        }
+    }
+    return a;
+}
+
+UInt256 operator*(const UInt256 &n, const UInt256 &m)
+{
+    UInt256 a;
+    for (int i = 0; i < 8; ++i)
+    {
+        std::bitset<32> bits(m.parts[i]);
+        for (int j = 0; j < 32; ++j)
+        {
+            if (bits[j])
+            {
+                a += (n << (j+i*32));
+            }
+        }
+    }
+    return a;
+}
+
+bool operator==(const UInt256 &n, const UInt256 &m)
+{
+    for (int i = 0; i < 8; ++i)
+    {
+        if (n.parts[i] != m.parts[i])
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool operator!=(const UInt256 &n, const UInt256 &m)
+{
+    for (int i = 0; i < 8; ++i)
+    {
+        if (n.parts[i] == m.parts[i])
+        {
+            return false;
+        }
+    }
+    return true;
 }
