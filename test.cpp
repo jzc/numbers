@@ -6,8 +6,9 @@ using namespace std;
 
 int main()
 {
-    UInt256 u(UINT_MAX);
-    cout << (u << 32) << endl;
-    cout << (u << 33) << endl;
-    cout << (u << 34) << endl;
+    UInt256 u(123456789);
+    cout << u << endl;
+    cout << (u << 64) << endl;
+    cout << (u << 65) << endl;
+    cout << (u << 66) << endl;
 }

@@ -77,14 +77,30 @@ UInt256 operator-(const UInt256 &n, unsigned int m)
 UInt256 operator<<(UInt256 n, int b)
 {
     unsigned int prev, curr;
-    prev = n.parts[0] >> (32-b);
-    n.parts[0] <<= b;
-    for (int i = 1; i < 7; ++i)
+    int up = b/32;
+    if (up >= 1)
     {
-        curr = n.parts[i] >> (32-b);
-        (n.parts[i] <<= b) += prev;
-        prev = curr;
+        for (int i = 8; i >= up; --i)
+        {
+            n.parts[i] = n.parts[i-up];
+        }
+        for (int i = 0; i < up; ++i)
+        {
+            n.parts[i] = 0;
+        }
+        b %= 32;
     }
-    (n.parts[7] <<= b) += prev;
+    if (b != 0)
+    {
+        prev = n.parts[up] >> (32-b);
+        n.parts[up] <<= b;
+        for (int i = up+1; i < 7; ++i)
+        {
+            curr = n.parts[i] >> (32-b);
+            (n.parts[i] <<= b) += prev;
+            prev = curr;
+        }
+        (n.parts[7] <<= b) += prev;
+    }
     return n;
 }
