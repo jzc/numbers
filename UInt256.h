@@ -25,7 +25,9 @@ class UInt256
         friend UInt256  operator^ (UInt256 n, const UInt256 &m);
         friend UInt256  operator| (UInt256 n, const UInt256 &m);
         friend UInt256  operator- (const UInt256 &n, unsigned int m);
+        friend UInt256  operator- (const UInt256 &n, const UInt256 &m);
         friend UInt256  operator<<(UInt256 n, int b);
+        friend UInt256  operator>>(UInt256 n, int b);
         friend UInt256  operator* (const UInt256 &n, unsigned int m);
         friend UInt256  operator* (const UInt256 &n, const UInt256 &m);
         friend bool operator==(const UInt256 &n, const UInt256 &m);

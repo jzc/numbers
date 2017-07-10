@@ -6,6 +6,10 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-    cout << UInt256("12345") << endl;
-    cout << UInt256(12345)+1 << endl;
+    UInt256 u(UINT_MAX);
+    u = u << 32*2;
+    cout << u << endl;
+    cout << (u >> 32) << endl;
+    cout << (u >> 64) << endl;
+    cout << (u >> 66) << endl;
 }
