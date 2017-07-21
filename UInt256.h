@@ -31,6 +31,8 @@ class UInt256
         friend UInt256  operator>>(UInt256 n, int b);
         friend UInt256  operator* (const UInt256 &n, unsigned int m);
         friend UInt256  operator* (const UInt256 &n, const UInt256 &m);
+        friend UInt256  operator/ (UInt256 n, UInt256 m);
+        friend UInt256  operator% (UInt256 n, UInt256 m);
         friend bool operator==(const UInt256 &n, const UInt256 &m);
         friend bool operator==(const UInt256 &n, const unsigned int m);
         friend bool operator!=(const UInt256 &n, const UInt256 &m);
@@ -39,8 +41,8 @@ class UInt256
         friend bool operator< (const UInt256 &n, const UInt256 &m);
         friend bool operator>=(const UInt256 &n, const UInt256 &m);
         friend bool operator<=(const UInt256 &n, const UInt256 &m);
+        friend void divMod(UInt256 n, UInt256 m, UInt256 &ans, UInt256 &rem);
 };
 
 static const UInt256 TEN = 10;
-
-void divMod(UInt256 n, UInt256 m, UInt256 &ans, UInt256 &rem);
+static const unsigned int MAXC = 1 << 31;

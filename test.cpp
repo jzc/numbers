@@ -2,6 +2,7 @@
 #include <limits.h>
 #include <stdlib.h>
 #include "UInt256.h"
+#include <deque>
 
 using namespace std;
 
@@ -14,5 +15,10 @@ UInt256 factorial(int n)
 
 int main(int argc, char** argv)
 {
-    cout << factorial(50) << endl;
+    UInt256 u = 1, m;
+    u = u << 255;
+    cout << u << endl;
+    cout << u/2 << endl;
+    cout << (u/2)*2 << endl;
+    cout << u % 5 << endl;
 }

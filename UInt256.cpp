@@ -396,14 +396,26 @@ void divMod(UInt256 n, UInt256 m, UInt256 &ans, UInt256 &rem)
 
     UInt256 c = 1;
     ans = 0;
-    //todo: check for overflow
+    bool shiftback = true;
     while (m <= n)
     {
-        m = m << 1;
         c = c << 1;
+        if (c.parts[SIZE-1] == MAXC)
+        {
+            shiftback = false;
+            break;
+        }
+        else
+        {
+            m = m << 1;
+        }
     }
-    m = m >> 1;
     c = c >> 1;
+    if (shiftback)
+    {
+        m = m >> 1;
+    }
+    //optimize using parts?
     while (c != 0)
     {
         if (n >= m)
@@ -415,4 +427,99 @@ void divMod(UInt256 n, UInt256 m, UInt256 &ans, UInt256 &rem)
         m = m >> 1;
     }
     rem = n;
+}
+
+UInt256 operator/(UInt256 n, UInt256 m)
+{
+    UInt256 ans, rem;
+    if (m > n || n == 0)
+    {
+        ans = 0;
+        return ans;
+    }
+    if (n == m)
+    {
+        ans = 1;
+        return ans;
+    }
+    UInt256 c = 1;
+    ans = 0;
+    bool shiftback = true;
+    while (m <= n)
+    {
+        c = c << 1;
+        if (c.parts[SIZE-1] == MAXC)
+        {
+            shiftback = false;
+            break;
+        }
+        else
+        {
+            m = m << 1;
+        }
+    }
+    c = c >> 1;
+    if (shiftback)
+    {
+        m = m >> 1;
+    }
+    //optimize using parts?
+    while (c != 0)
+    {
+        if (n >= m)
+        {
+            n = n - m;
+            ans = ans | c;
+        }
+        c = c >> 1;
+        m = m >> 1;
+    }
+    return ans;
+}
+
+UInt256 operator%(UInt256 n, UInt256 m)
+{
+    UInt256 ans, rem;
+    if (m > n || n == 0)
+    {
+        return n;
+    }
+    if (n == m)
+    {
+        rem = 0;
+        return rem;
+    }
+    UInt256 c = 1;
+    ans = 0;
+    bool shiftback = true;
+    while (m <= n)
+    {
+        c = c << 1;
+        if (c.parts[SIZE-1] == MAXC)
+        {
+            shiftback = false;
+            break;
+        }
+        else
+        {
+            m = m << 1;
+        }
+    }
+    c = c >> 1;
+    if (shiftback)
+    {
+        m = m >> 1;
+    }
+    //optimize using parts?
+    while (c != 0)
+    {
+        if (n >= m)
+        {
+            n = n - m;
+            ans = ans | c;
+        }
+        c = c >> 1;
+        m = m >> 1;
+    }
+    return n;
 }
