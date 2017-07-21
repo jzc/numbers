@@ -11,9 +11,10 @@ class UInt256
     public:
         UInt256();
         UInt256(const UInt256 &n);
-        UInt256(unsigned int n);
-        UInt256(std::string n);
+        UInt256(const unsigned int n);
+        UInt256(const std::string n);
         UInt256(const char* n);
+        UInt256& operator=(const unsigned int n);
         std::string toString();
         friend std::ostream& operator<<(std::ostream& os, const UInt256 &n);
         friend UInt256  operator+ (UInt256 n, unsigned int m);
@@ -31,5 +32,13 @@ class UInt256
         friend UInt256  operator* (const UInt256 &n, unsigned int m);
         friend UInt256  operator* (const UInt256 &n, const UInt256 &m);
         friend bool operator==(const UInt256 &n, const UInt256 &m);
+        friend bool operator==(const UInt256 &n, const unsigned int m);
         friend bool operator!=(const UInt256 &n, const UInt256 &m);
+        friend bool operator!=(const UInt256 &n, const unsigned int m);
+        friend bool operator> (const UInt256 &n, const UInt256 &m);
+        friend bool operator< (const UInt256 &n, const UInt256 &m);
+        friend bool operator>=(const UInt256 &n, const UInt256 &m);
+        friend bool operator<=(const UInt256 &n, const UInt256 &m);
 };
+
+void divMod(UInt256 n, UInt256 m, UInt256 &ans, UInt256 &rem);

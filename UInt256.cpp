@@ -13,12 +13,12 @@ UInt256::UInt256(const UInt256 &n)
     }
 }
 
-UInt256::UInt256(unsigned int n)
+UInt256::UInt256(const unsigned int n)
 {
     parts[0] = n;
 }
 
-UInt256::UInt256(std::string n)
+UInt256::UInt256(const std::string n)
 {
     for (auto c : n)
     {
@@ -105,6 +105,7 @@ UInt256 operator&(UInt256 n, const UInt256 &m)
     {
         n.parts[i] &= m.parts[i];
     }
+    return n;
 }
 
 UInt256 operator^(UInt256 n, const UInt256 &m)
@@ -113,6 +114,7 @@ UInt256 operator^(UInt256 n, const UInt256 &m)
     {
         n.parts[i] ^= m.parts[i];
     }
+    return n;
 }
 
 UInt256 operator|(UInt256 n, const UInt256 &m)
@@ -121,6 +123,7 @@ UInt256 operator|(UInt256 n, const UInt256 &m)
     {
         n.parts[i] |= m.parts[i];
     }
+    return n;
 }
 
 UInt256 operator-(const UInt256 &n, unsigned int m)
@@ -270,4 +273,129 @@ bool operator!=(const UInt256 &n, const UInt256 &m)
         }
     }
     return true;
+}
+
+UInt256 &UInt256::operator=(const unsigned int n)
+{
+    parts[0] = n;
+    return *this;
+}
+
+bool operator==(const UInt256 &n, const unsigned int m)
+{
+    for (int i = SIZE-1; i >= 1; --i)
+    {
+        if (n.parts[i] != 0)
+        {
+            return false;
+        }
+    }
+    return n.parts[0] == m;
+}
+
+
+//00 00 00 01
+//10 00 00 00
+
+//
+bool operator!=(const UInt256 &n, const unsigned int m)
+{
+    for (int i = SIZE-1; i >= 1; --i)
+    {
+        if (n.parts[i] != 0)
+        {
+            return true;
+        }
+    }
+    return n.parts[0] != m;
+}
+
+//template these?
+bool operator>(const UInt256 &n, const UInt256 &m)
+{
+    for(int i = SIZE-1; i >= 0; --i)
+    {
+        if (n.parts[i] != m.parts[i])
+        {
+            return n.parts[i] > m.parts[i];
+        }
+    }
+    return false;
+}
+
+bool operator<(const UInt256 &n, const UInt256 &m)
+{
+    for(int i = SIZE-1; i >= 0; --i)
+    {
+        if (n.parts[i] != m.parts[i])
+        {
+            return n.parts[i] < m.parts[i];
+        }
+    }
+    return false;
+}
+
+bool operator>=(const UInt256 &n, const UInt256 &m)
+{
+    for(int i = SIZE-1; i >= 0; --i)
+    {
+        if (n.parts[i] != m.parts[i])
+        {
+            return n.parts[i] >= m.parts[i];
+        }
+    }
+    return true;
+}
+
+bool operator<=(const UInt256 &n, const UInt256 &m)
+{
+    for(int i = SIZE-1; i >= 0; --i)
+    {
+        if (n.parts[i] != m.parts[i])
+        {
+            return n.parts[i] <= m.parts[i];
+        }
+    }
+    return true;
+}
+
+void divMod(UInt256 n, UInt256 m, UInt256 &ans, UInt256 &rem)
+{
+    if (n == 0)
+    {
+        return;
+    }
+    if (m > n)
+    {
+        ans = 0;
+        rem = n;
+        return;
+    }
+    if (n == m)
+    {
+        ans = 1;
+        rem = 0;
+        return;
+    }
+
+    UInt256 c = 1;
+    ans = 0;
+    while (m <= n)
+    {
+        m = m << 1;
+        c = c << 1;
+    }
+    m = m >> 1;
+    c = c >> 1;
+    while (c != 0)
+    {
+        if (n >= m)
+        {
+            n = n - m;
+            ans = ans | c;
+        }
+        c = c >> 1;
+        m = m >> 1;
+    }
+    rem = n;
 }

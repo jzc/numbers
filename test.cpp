@@ -1,15 +1,24 @@
 #include <iostream>
 #include <limits.h>
+#include <stdlib.h>
 #include "UInt256.h"
 
 using namespace std;
 
+UInt256 factorial(int n)
+{
+    UInt256 u(n--);
+    while(n >= 1) u = u*n--;
+    return u;
+}
+
 int main(int argc, char** argv)
 {
-    UInt256 u(UINT_MAX);
-    u = u << 32*2;
+    UInt256 u = 1;
+    u = u << 255;
+    UInt256 d = 2;
     cout << u << endl;
-    cout << (u >> 32) << endl;
-    cout << (u >> 64) << endl;
-    cout << (u >> 66) << endl;
+    UInt256 ans, rem;
+    divMod(u, d, ans, rem);
+    cout << ans << endl << rem << endl;
 }
