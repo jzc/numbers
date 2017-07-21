@@ -2,6 +2,8 @@
 #include <string>
 #include <iostream>
 #include <bitset>
+#include <sstream>
+#include <algorithm>
 
 UInt256::UInt256() {}
 
@@ -46,17 +48,32 @@ void UInt256::addToPart(int p, unsigned int n)
     parts[p] += n;
 }
 
-std::string UInt256::toString()
+std::string UInt256::toString() const
 {
-    return std::to_string(parts[1]) + " " + std::to_string(parts[0]);
+    std::ostringstream os;
+    if (*this == 0)
+    {
+        os << "0";
+        return os.str();
+    }
+    UInt256 c = *this, rem;
+    while (c != 0)
+    {
+        divMod(c, TEN, c, rem);
+        os << (char)(rem.parts[0] + '0');
+    }
+    std::string temp = os.str();
+    std::reverse(temp.begin(), temp.end());
+    return temp;
 }
 
 std::ostream &operator<<(std::ostream &os, const UInt256 &n)
 {
-    for (int i = SIZE - 1; i >= 0; --i)
-    {
-        os << std::bitset<LEN>(n.parts[i]) << std::endl;
-    }
+    // for (int i = SIZE - 1; i >= 0; --i)
+    // {
+    //     os << std::bitset<LEN>(n.parts[i]) << std::endl;
+    // }
+    os << n.toString();
     return os;
 }
 
@@ -278,6 +295,10 @@ bool operator!=(const UInt256 &n, const UInt256 &m)
 UInt256 &UInt256::operator=(const unsigned int n)
 {
     parts[0] = n;
+    for (int i = 1; i < SIZE; ++i)
+    {
+        parts[i] = 0;
+    }
     return *this;
 }
 
@@ -293,11 +314,6 @@ bool operator==(const UInt256 &n, const unsigned int m)
     return n.parts[0] == m;
 }
 
-
-//00 00 00 01
-//10 00 00 00
-
-//
 bool operator!=(const UInt256 &n, const unsigned int m)
 {
     for (int i = SIZE-1; i >= 1; --i)
@@ -380,6 +396,7 @@ void divMod(UInt256 n, UInt256 m, UInt256 &ans, UInt256 &rem)
 
     UInt256 c = 1;
     ans = 0;
+    //todo: check for overflow
     while (m <= n)
     {
         m = m << 1;
